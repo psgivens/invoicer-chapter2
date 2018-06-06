@@ -5,19 +5,23 @@
 # uncomment to debug
 #set -x
 
+# Don't set this variable if you are copy/pasting or sliming
+EXEC_AS_SCRIPT=true
+
+
 fail() {
     echo configuration failed
-    exit 1
+    if $EXEC_AS_SCRIPT; then exit 1; fi
 }
 
-export AWS_DEFAULT_REGION=${AWS_REGION:-us-east-1}
+export AWS_DEFAULT_REGION=${AWS_REGION:-us-west-1}
 
 datetag=$(date +%Y%m%d%H%M)
 identifier=$(whoami)-invoicer-$datetag
 mkdir -p tmp/$identifier
 
+clear
 echo "Creating EBS application $identifier"
-
 # Find the ID of the default VPC
 aws ec2 describe-vpcs --filters Name=isDefault,Values=true > tmp/$identifier/defaultvpc.json || fail
 vpcid=$(jq -r '.Vpcs[0].VpcId' tmp/$identifier/defaultvpc.json)
