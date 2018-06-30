@@ -132,6 +132,8 @@
     
     sudo docker build --no-cache -t actionablelabs/invoicer-chapter2 .
 
+    go test
+
 ### While logged into database container
 
     psql --username "$POSTGRES_USER" --dbname "$POSTGRES_DB"
