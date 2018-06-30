@@ -5,7 +5,7 @@ jobs:
   # You will need to modify the code below to reflect your github account/repo setup
   working_directory: /go/src/github.com/actionable-labs/invoicer-chapter2
   docker:
-   - image: circleci/golang:1.8
+   - image: circleci/golang:1.10
   steps:
    - checkout
    - setup_remote_docker
@@ -46,5 +46,3 @@ jobs:
              sudo tee $CIRCLE_ARTIFACTS/docker-image-shasum256.txt;
            docker push ${DOCKER_REPO}/${CIRCLE_PROJECT_REPONAME};
          fi
-            
-
