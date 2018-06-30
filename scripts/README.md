@@ -122,8 +122,9 @@
 
 ### Install invoicer as per book
     
-    pushd ~/learn/secdevops
+    #pushd ~/learn/secdevops
 
+    clear
     go install --ldflags '-extldflags "-static"' \
       github.com/actionable-labs/invoicer-chapter2
     
@@ -131,8 +132,6 @@
     cp "$GOPATH/bin/invoicer-chapter2" bin/invoicer
     
     sudo docker build --no-cache -t actionablelabs/invoicer-chapter2 .
-
-    go test
 
 ### While logged into database container
 

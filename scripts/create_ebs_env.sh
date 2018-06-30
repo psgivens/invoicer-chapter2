@@ -36,26 +36,6 @@ exit
 #cat tmp/$identifier/eb-events*.json |less
 
 
-
-#aws elasticbeanstalk describe-events --environment-id $apieid > tmp/$identifier/eb-events.json
-#aws elasticbeanstalk describe-events --environment-id $apieid > tmp/$identifier/eb-events1.json
-
-
-# After the error message, a web-page was being displayed. Then I restarted the webservers
-# and now I am getting a 502 Bad Gateway. 
-#
-# https://aws.amazon.com/premiumsupport/knowledge-center/load-balancer-http-502-errors/
-#
-# Things to try:
-# 1) Look for more logging information through the console/cli.
-# 2) Log into the VMs and look at the logs locally.
-# 3) Try running the docker container locally against a postgresql database. 
-
-
-
-
-
-
 clear
 echo "Creating EBS application $identifier"
 # Find the ID of the default VPC
@@ -208,6 +188,7 @@ echo "Environment is being deployed. Public endpoint is http://$url"
 
 echo $url
 
+url=psgivens-invoicer-201806300737-inv-api.46mmped6da.us-west-2.elasticbeanstalk.com
 
 # Post the example
 curl -X POST \
