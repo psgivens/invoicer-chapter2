@@ -81,9 +81,9 @@
       -e INVOICER_POSTGRES_SSLMODE="disable" \
       --network secdevops-net \
       --rm \
-      -it \
-      --entrypoint sh \
+      -d \
       actionablelabs/invoicer-chapter2 
+      #-it --entrypoint sh \
 
     # Run with sqlite database
     sudo docker run \
