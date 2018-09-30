@@ -25,18 +25,8 @@ datetag=$(date +%Y%m%d%H%M)
 identifier=$(whoami)-invoicer-$datetag
 mkdir -p tmp/$identifier
 
+echo "\n\n\n"
 
-exit
-
-# Notes. We left off with this.
-#identifier=psgivens-invoicer-201806120644
-#datetag="201806120644"
-
-# The latest events can be found at 
-#cat tmp/$identifier/eb-events*.json |less
-
-
-clear
 echo "Creating EBS application $identifier"
 # Find the ID of the default VPC
 aws ec2 describe-vpcs --filters Name=isDefault,Values=true > tmp/$identifier/defaultvpc.json || fail
@@ -188,7 +178,7 @@ echo "Environment is being deployed. Public endpoint is http://$url"
 
 echo $url
 
-url=psgivens-invoicer-201806300737-inv-api.46mmped6da.us-west-2.elasticbeanstalk.com
+#url=psgivens-invoicer-201806300737-inv-api.46mmped6da.us-west-2.elasticbeanstalk.com
 
 # Post the example
 curl -X POST \
@@ -196,8 +186,6 @@ curl -X POST \
     http://$url/invoice
 
 curl http://$url/invoice/1
-
-echo $url
 
 
 # Should be something like: 

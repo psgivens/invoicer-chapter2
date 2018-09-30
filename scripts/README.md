@@ -6,15 +6,17 @@
 
     Initialize-InvDocker
 
+    Get-InvStatus
+
 ### Build
 
     Build-InvApp
     Build-InvDb
 
-
     Start-InvDb
-    Start-InvApp -UseDatabase
     Start-InvPgadmin
+
+    Start-InvApp -UseDatabase
 
 ### While logged into database container
 

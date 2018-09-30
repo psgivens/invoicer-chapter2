@@ -43,14 +43,30 @@ Function Start-InvPgadmin {
 
 
 Function Get-InvStatus {
-  sudo docker network list | grep -E 'secdevops|NAME'
-  echo ""
-  sudo docker volume list | grep -E 'secdevops|NAME'
-  echo ""
-  sudo docker container list -a | grep -E "NAMES|secdevops"
-  echo ""
-  sudo docker image list | grep -E "secdevops|REPOSITORY"
-  echo ""
+  echo "Networks:"
+  sudo docker network list --format '{{json .}}' `
+    | ConvertFrom-Json `
+    | ?{ $_.Name -match 'secdevops' } `
+    | Select Id, Name, Driver `
+    | Format-Table
+  echo "Volumes:"
+  sudo docker volume list  --format '{{json .}}' `
+    | ConvertFrom-Json `
+    | ?{ $_.Name -match 'secdevops' } `
+    | Select -Property Name, Driver, Mountpoint `
+    | Format-Table
+  echo "Containers:"
+  sudo docker container list -a --format '{{json .}}' `
+    | ConvertFrom-Json `
+    | ?{ $_.Names -match 'secdevops' -or $_.Names -match 'pgadmin' } `
+    | Select -Property ID, Names, Ports, Status `
+    | Format-Table
+  echo "Images:"
+  sudo docker image list --format '{{json .}}' `
+    | ConvertFrom-Json `
+    | ?{ $_.Repository -match 'invoicer' -or $_.Repository -match 'pgadmin' } `
+    | Select -Property ID, Repository, CreatedSince `
+    | Format-Table
 }
 
 
@@ -93,7 +109,7 @@ Function Start-InvApp {
       -e INVOICER_USE_POSTGRES="yes" `
       -e INVOICER_POSTGRES_USER="invoicer" `
       -e INVOICER_POSTGRES_PASSWORD="Password1" `
-      -e INVOICER_POSTGRES_HOST="secdevops-pgsql"
+      -e INVOICER_POSTGRES_HOST="secdevops-pgsql" `
       -e INVOICER_POSTGRES_DB="invoicer" `
       -e INVOICER_POSTGRES_SSLMODE="disable" `
       --network secdevops-net `
