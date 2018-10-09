@@ -13,7 +13,7 @@ install:
 	$(GO) install $(PROJECT)
 
 vendor:
-	govend -u
+	govend -u --prune
 
 tag: all
 	git tag -s $(TAGVER) -a -m "$(TAGMSG)"
@@ -33,5 +33,5 @@ showcoverage: test
 generate:
 	$(GO) generate
 
-.PHONY: all test generate clean tag lint vet showcoverage vendor
+.PHONY: all test generate clean vendor
 
