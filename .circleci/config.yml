@@ -34,7 +34,10 @@ jobs:
       - run:
           name: Run application in background
           command: |
-            docker run ${DOCKER_REPO}/${CIRCLE_PROJECT_REPONAME}
+            docker run \
+                --network secdevops-net \
+                --name invoicer \
+                ${DOCKER_REPO}/${CIRCLE_PROJECT_REPONAME} 
           background: true
 
       - run:
@@ -42,12 +45,15 @@ jobs:
           # Only fail on error code 1, which indicates at least one FAIL was found.
           # error codes 2 & 3 indicate WARN or other, and should not break the run
 #         if [ $? -ne 1 ]; then exit 0; else exit 1; fi;
+                #-t http://172.17.0.2:8080/ || \
           command: |
             (
             docker pull owasp/zap2docker-weekly && \
-            docker run -t owasp/zap2docker-weekly zap-baseline.py \
+            docker run \
+                --network secdevops-net \
+                -t owasp/zap2docker-weekly zap-baseline.py \
                 -u https://raw.githubusercontent.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/master/zap-baseline.conf \
-                -t http://172.17.0.2:8080/ || \
+                -t invoicer
             exit 0
             )
 
