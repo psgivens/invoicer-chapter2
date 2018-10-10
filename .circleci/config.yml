@@ -53,7 +53,7 @@ jobs:
                 --network secdevops-net \
                 -t owasp/zap2docker-weekly zap-baseline.py \
                 -u https://raw.githubusercontent.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/master/zap-baseline.conf \
-                -t http://invoicer:8080/ 
+                -t http://invoicer:8080/ || \
             exit 0
             )
 
