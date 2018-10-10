@@ -177,7 +177,7 @@ $ docker run -it \
     -e INVOICER_POSTGRES_HOST="172.17.0.1" \
     -e INVOICER_POSTGRES_DB="invoicer" \
     -e INVOICER_POSTGRES_SSLMODE="disable" \
-    securingdevops/invoicer-chapter2
+    psgivens/invoicer-chapter2
 ```
 
 Use
