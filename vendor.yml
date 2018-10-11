@@ -1,47 +1,43 @@
 vendors:
+- path: cloud.google.com/go
+  rev: 5f0ffe7729373c98a5801de148565a893a0d2899
 - path: github.com/davecgh/go-spew
-  rev: a476722483882dd40b8111f0eb64e1d7f43f56e4
+  rev: d8f796af33cc11cb798c1aaeb27a4ebc5099927d
 - path: github.com/denisenkom/go-mssqldb
-  rev: c7ee4153c0fc40206bde939f96eefa1f501cbcaa
+  rev: 1eb28afdf9b6e56cf673badd47545f844fe81103
 - path: github.com/erikstmartin/go-testdb
   rev: 8d10e4a1bae52cd8b81ffdec3445890d6dccab3d
 - path: github.com/go-sql-driver/mysql
-  rev: 7785c74297136c027fdf2fd6f8931c0e19be8aa7
-- path: github.com/golang/protobuf
-  rev: 130e6b02ab059e7b717a096f397c5b60111cae74
+  rev: 361f66ef3b53de1f16b7f2af9ef38a6c159ceb3e
+- path: github.com/google/go-cmp
+  rev: 875f8df8b7965f1eac1098d36d677f807ac0b49e
 - path: github.com/gorilla/context
   rev: 08b5f424b9271eedf6f9f0ce86cb9396ed337a42
 - path: github.com/gorilla/mux
-  rev: 3f19343c7d9ce75569b952758bd236af94956061
+  rev: 9e1f5955c0d22b55d9e20d6faa28589f83b2faca
 - path: github.com/gorilla/securecookie
-  rev: e59506cc896acb7f7bf732d4fdf5e25f7ccd8983
+  rev: e65cf8c5df817c89aeb47ecb46064e802e2de943
 - path: github.com/gorilla/sessions
-  rev: b61c93cb7f67533c8bfbb5ea450efc07e5833c5e
+  rev: f57b7e2d29c6211d16ffa52a0998272f75799030
 - path: github.com/jinzhu/gorm
-  rev: 3a9e91ab372120a0e35b518430255308e3d8d5ea
+  rev: 742154be9a26e849f02d296073c077e0a7c23828
 - path: github.com/jinzhu/inflection
-  rev: 1c35d901db3da928c72a72d8458480cc9ade058f
+  rev: 04140366298a54a039076d798123ffa108fff46c
 - path: github.com/jinzhu/now
-  rev: d939ba741945c047cac69c329c5fb0d6b4a06520
+  rev: ed742868f2aebdb1c0c437bf4f7257f88834b66f
 - path: github.com/lib/pq
-  rev: b77235e3890a962fe8a6f8c4c7198679ca7814e7
+  rev: 4ded0e9383f75c197b3a2aaa6d590ac52df6fd79
 - path: github.com/mattn/go-sqlite3
-  rev: 5160b48509cf5c877bc22c11c373f8c7738cdb38
+  rev: 0a88db3545c4089ce0f555f496bfc78c491699e5
 - path: github.com/pmezard/go-difflib
   rev: 792786c7400a136282c1664665ae0a8db921c6c2
 - path: github.com/stretchr/testify
-  rev: 890a5c3458b43e6104ff5da8dfa139d013d77544
+  rev: 2db35c88b92a1631e987089b5485a95e68bc5d3a
 - path: github.com/wader/gormstore
-  rev: a066dd77f804fa7d7af7c770180a2013c0ee4190
+  rev: e3293a80ecfe307cf4e1deeb54e6a998dc1d28cd
 - path: go.mozilla.org/mozlog
   rev: 4bb13139d40339f59bf140d0f5f28be83b07cc58
 - path: golang.org/x/crypto
-  rev: 76eec36fa14229c4b25bb894c2d0e591527af429
-- path: golang.org/x/net
-  rev: 0a9397675ba34b2845f758fe3cd68828369c6517
-- path: golang.org/x/oauth2
-  rev: bb50c06baba3d0c76f9d125c0719093e315b5b44
-- path: golang.org/x/sync
-  rev: 8e0aa688b654ef28caa72506fa5ec8dba9fc7690
+  rev: 7c1a557ab941a71c619514f229f0b27ccb0c27cf
 - path: google.golang.org/appengine
-  rev: 24e4144ec923c2374f6b06610c0df16a9222c3d9
+  rev: ae0ab99deb4dc413a2b4bd6c8bdd0eb67f1e4d06

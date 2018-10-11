@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"os"
 	"reflect"
+	"strconv"
 	"testing"
 	"time"
 
@@ -33,6 +34,7 @@ type User struct {
 	CompanyID         *int
 	Company           Company
 	Role              Role
+	Password          EncryptedData
 	PasswordHash      []byte
 	IgnoreMe          int64                 `sql:"-"`
 	IgnoreStringSlice []string              `sql:"-"`
@@ -116,6 +118,39 @@ type Company struct {
 	Owner *User `sql:"-"`
 }
 
+type Place struct {
+	Id             int64
+	PlaceAddressID int
+	PlaceAddress   *Address `gorm:"save_associations:false"`
+	OwnerAddressID int
+	OwnerAddress   *Address `gorm:"save_associations:true"`
+}
+
+type EncryptedData []byte
+
+func (data *EncryptedData) Scan(value interface{}) error {
+	if b, ok := value.([]byte); ok {
+		if len(b) < 3 || b[0] != '*' || b[1] != '*' || b[2] != '*' {
+			return errors.New("Too short")
+		}
+
+		*data = b[3:]
+		return nil
+	}
+
+	return errors.New("Bytes expected")
+}
+
+func (data EncryptedData) Value() (driver.Value, error) {
+	if len(data) > 0 && data[0] == 'x' {
+		//needed to test failures
+		return nil, errors.New("Should not start with 'x'")
+	}
+
+	//prepend asterisks
+	return append([]byte("***"), data...), nil
+}
+
 type Role struct {
 	Name string `gorm:"size:256"`
 }
@@ -142,6 +177,8 @@ type Num int64
 func (i *Num) Scan(src interface{}) error {
 	switch s := src.(type) {
 	case []byte:
+		n, _ := strconv.Atoi(string(s))
+		*i = Num(n)
 	case int64:
 		*i = Num(s)
 	default:
@@ -255,7 +292,7 @@ func runMigration() {
 		DB.Exec(fmt.Sprintf("drop table %v;", table))
 	}
 
-	values := []interface{}{&Short{}, &ReallyLongThingThatReferencesShort{}, &ReallyLongTableNameToTestMySQLNameLengthLimit{}, &NotSoLongTableName{}, &Product{}, &Email{}, &Address{}, &CreditCard{}, &Company{}, &Role{}, &Language{}, &HNPost{}, &EngadgetPost{}, &Animal{}, &User{}, &JoinTable{}, &Post{}, &Category{}, &Comment{}, &Cat{}, &Dog{}, &Hamster{}, &Toy{}, &ElementWithIgnoredField{}}
+	values := []interface{}{&Short{}, &ReallyLongThingThatReferencesShort{}, &ReallyLongTableNameToTestMySQLNameLengthLimit{}, &NotSoLongTableName{}, &Product{}, &Email{}, &Address{}, &CreditCard{}, &Company{}, &Role{}, &Language{}, &HNPost{}, &EngadgetPost{}, &Animal{}, &User{}, &JoinTable{}, &Post{}, &Category{}, &Comment{}, &Cat{}, &Dog{}, &Hamster{}, &Toy{}, &ElementWithIgnoredField{}, &Place{}}
 	for _, value := range values {
 		DB.DropTable(value)
 	}
@@ -369,6 +406,53 @@ func TestAutoMigration(t *testing.T) {
 	}
 }
 
+func TestCreateAndAutomigrateTransaction(t *testing.T) {
+	tx := DB.Begin()
+
+	func() {
+		type Bar struct {
+			ID uint
+		}
+		DB.DropTableIfExists(&Bar{})
+
+		if ok := DB.HasTable("bars"); ok {
+			t.Errorf("Table should not exist, but does")
+		}
+
+		if ok := tx.HasTable("bars"); ok {
+			t.Errorf("Table should not exist, but does")
+		}
+	}()
+
+	func() {
+		type Bar struct {
+			Name string
+		}
+		err := tx.CreateTable(&Bar{}).Error
+
+		if err != nil {
+			t.Errorf("Should have been able to create the table, but couldn't: %s", err)
+		}
+
+		if ok := tx.HasTable(&Bar{}); !ok {
+			t.Errorf("The transaction should be able to see the table")
+		}
+	}()
+
+	func() {
+		type Bar struct {
+			Stuff string
+		}
+
+		err := tx.AutoMigrate(&Bar{}).Error
+		if err != nil {
+			t.Errorf("Should have been able to alter the table, but couldn't")
+		}
+	}()
+
+	tx.Rollback()
+}
+
 type MultipleIndexes struct {
 	ID     int64
 	UserID int64  `sql:"unique_index:uix_multipleindexes_user_name,uix_multipleindexes_user_email;index:idx_multipleindexes_user_other"`
@@ -435,10 +519,7 @@ func TestMultipleIndexes(t *testing.T) {
 }
 
 func TestModifyColumnType(t *testing.T) {
-	dialect := os.Getenv("GORM_DIALECT")
-	if dialect != "postgres" &&
-		dialect != "mysql" &&
-		dialect != "mssql" {
+	if dialect := os.Getenv("GORM_DIALECT"); dialect != "postgres" && dialect != "mysql" && dialect != "mssql" {
 		t.Skip("Skipping this because only postgres, mysql and mssql support altering a column type")
 	}
 
